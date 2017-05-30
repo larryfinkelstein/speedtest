@@ -1,0 +1,25 @@
+<configuration>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%-5level] %class{16}.%M %L - %msg%n%rEx</pattern>
+            <immediateFlush>false</immediateFlush>
+        </encoder>
+    </appender>
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>ScalaTest.log</file>
+
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%-5level] %class{16}.%M %L - %msg%n%rEx</pattern>
+            <immediateFlush>false</immediateFlush>
+        </encoder>
+    </appender>
+
+    <logger name="odp" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <root>
+        <level value="INFO"/>
+        <appender-ref ref="CONSOLE"/>
+        <!--<appender-ref ref="FILE" />-->
+    </root>
+</configuration>
