@@ -9,14 +9,11 @@ parallelExecution in Test := false
 
 libraryDependencies ++= Seq(
   "org.scalactic" %% "scalactic" % scalaTestVersion,
-  // https://mvnrepository.com/artifact/org.scalatest/scalatest_2.12
-  "org.scalatest" % "scalatest_2.12" % scalaTestVersion,
-  // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
-  "org.seleniumhq.selenium" % "selenium-java" % "3.4.0",
-  // https://mvnrepository.com/artifact/com.typesafe/config
-  "com.typesafe" % "config" % "1.3.1",
-  // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
-  "ch.qos.logback" % "logback-classic" % "1.2.3"
+    "org.scalatest" % "scalatest_2.12" % scalaTestVersion,
+    "org.seleniumhq.selenium" % "selenium-java" % "3.4.0",
+    "com.typesafe" % "config" % "1.3.1",
+    "com.typesafe.scala-logging" %% "scala-logging" % "3.5.0",
+    "ch.qos.logback" % "logback-classic" % "1.2.3"
 
 )
 
