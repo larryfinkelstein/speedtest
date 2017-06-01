@@ -13,7 +13,7 @@ libraryDependencies ++= Seq(
     "org.seleniumhq.selenium" % "selenium-java" % "3.4.0",
     "com.typesafe" % "config" % "1.3.1",
     "com.typesafe.scala-logging" %% "scala-logging" % "3.5.0",
-    "ch.qos.logback" % "logback-classic" % "1.2.3"
-
+    "ch.qos.logback" % "logback-classic" % "1.2.3",
+    "joda-time" % "joda-time" % "2.9.9"
 )
 
