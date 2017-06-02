@@ -14,9 +14,6 @@
         </encoder>
     </appender>
 
-    <logger name="odp" level="DEBUG" additivity="false">
-        <appender-ref ref="CONSOLE" />
-    </logger>
     <root>
         <level value="INFO"/>
         <appender-ref ref="CONSOLE"/>
