@@ -1,3 +1,6 @@
+import java.util
+
+import drivers.ChromeFullScreen
 import org.scalatest.selenium._
 import org.scalatest.time.{Seconds, Span}
 import org.scalatest.{FunSpecLike, _}
@@ -12,19 +15,31 @@ trait SpeedtestSpec extends FunSpecLike with Matchers with concurrent.Eventually
     it("should compute download and upload speeds") {
       implicit val patienceConfig =
         PatienceConfig(timeout = scaled(Span(120, Seconds)), interval = scaled(Span(1, Seconds)))
+
       // Cancel test when cannot access
       try goTo("http://beta.speedtest.net") catch { case e: Throwable => cancel(e) }
+
+      if (webDriver.getClass.getSimpleName.equals("ChromeDriver")) {
+        val tabs2 = new util.ArrayList[String](webDriver.getWindowHandles)
+        println(tabs2.size)
+        tabs2.forEach(t => println(t))
+        println(webDriver.getCurrentUrl)
+
+        webDriver.switchTo().window(tabs2.get(1))
+        webDriver.close()
+        webDriver.switchTo().window(tabs2.get(0))
+      }
+
+      println("Waiting for start button")
       eventually {cssSelector(".start-button").element.size.width should be > 0}
       eventually {cssSelector(".start-text").element.text.toUpperCase should be ("GO!")}
 
       println("Clicking GO! button")
-      clickOn(cssSelector(".start-button > a"))
+//      clickOn(cssSelector(".start-button > a"))
+      clickOn(cssSelector(".start-text"))
 
       try {
         eventually { cssSelector(".start-text").element.text.toUpperCase should be ("AGAIN")}
-//        eventually { cssSelector("div.result-item.result-item-ping.updated > div.result-label").element.text should be ("PING") }
-//        eventually { cssSelector(".result-item-download > .result-label").element.text should be ("DOWNLOAD") }
-//        eventually { cssSelector("result-item-upload > .result-label").element.text should be ("UPLOAD") }
 
         println(s"Ping: ${cssSelector("#ping-value").element.text} " +
           s"${cssSelector("div.result-data > span.result-data-unit").element.text}")
@@ -38,18 +53,19 @@ trait SpeedtestSpec extends FunSpecLike with Matchers with concurrent.Eventually
       } catch {
         case e: Exception =>
           println(e.getMessage)
+          cancel(e)
       }
       finally
       {
         // your scala code here, such as to close a database connection
-        close()
+        quit()
       }
     }
   }
 
 }
 
-class SpeedtestSpecWithChrome extends SpeedtestSpec with Chrome
+class SpeedtestSpecWithChrome extends SpeedtestSpec with ChromeFullScreen
 class SpeedtestSpecWithSafari extends SpeedtestSpec with Safari
 class SpeedtestSpecWithInternetExplorer extends SpeedtestSpec with InternetExplorer
 class SpeedtestSpecWithFirefox extends SpeedtestSpec with Firefox
