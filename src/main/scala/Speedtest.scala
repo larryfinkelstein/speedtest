@@ -1,32 +1,27 @@
 import com.typesafe.config.{Config, ConfigFactory}
-import com.typesafe.scalalogging.{LazyLogging, Logger}
-import org.openqa.selenium.WebDriver
+import com.typesafe.scalalogging.LazyLogging
+import drivers.WebDrivers
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.remote.RemoteWebDriver
-import org.scalatest.{Matchers, concurrent}
 import org.scalatest.selenium.{WebBrowser, _}
-import org.scalatest.time.{Seconds, Span}
+import org.scalatest.{Matchers, concurrent}
 
 /**
   * Created by larryf on 5/28/2017.
   */
 
-object Speedtest extends App with WebBrowser with HtmlUnit with LazyLogging with concurrent.Eventually with Matchers {
-
-  lazy val os = System.getProperty("os.name")
+object Speedtest extends App with WebBrowser with WebDrivers with HtmlUnit with LazyLogging with concurrent.Eventually with Matchers {
 
   override def main(args: Array[String]): Unit = {
     Thread.currentThread.setName("ScalaTest-main")
 
-    logger debug s"Hello from $getCurrentDirectory"
-
     getAllDrivers.forEach( d => {
-      logger info s"${d.getString("name")}"
       if (isOkToRun(d)) {
         getAllSites.forEach( s => {
-          logger info s"   ${s.getString("name")}"
-          d.getString("name") match {
+          val browser = d.getString("name")
+          logger debug s"$browser ${s.getString("name")}"
+          browser match {
             case "Chrome" =>
               val t = new TestWebSpeedWithChrome
               t.runSpeedTest(s)
@@ -79,6 +74,6 @@ object Speedtest extends App with WebBrowser with HtmlUnit with LazyLogging with
     config.getConfigList("drivers")
   }
 
-  def getCurrentDirectory: String = new java.io.File(".").getCanonicalPath
-
 }
+
+
