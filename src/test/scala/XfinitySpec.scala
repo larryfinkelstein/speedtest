@@ -1,9 +1,7 @@
 import drivers.ChromeFullScreen
-import org.openqa.selenium.By
 import org.scalatest.selenium._
 import org.scalatest.time.{Seconds, Span}
 import org.scalatest.{FunSpecLike, _}
-import org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated
 
 /**
   * Created by larryf on 5/27/2017.
@@ -14,7 +12,7 @@ trait XfinitySpec extends FunSpecLike with Matchers with concurrent.Eventually {
   describe("speedtest.xfinity.com") {
     it("should compute download and upload speeds") {
       implicit val patienceConfig =
-        PatienceConfig(timeout = scaled(Span(60, Seconds)), interval = scaled(Span(1, Seconds)))
+        PatienceConfig(timeout = scaled(Span(120, Seconds)), interval = scaled(Span(1, Seconds)))
       // Cancel test when cannot access
       try goTo("http://speedtest.xfinity.com") catch { case e: Throwable => cancel(e) }
 
@@ -74,10 +72,13 @@ trait XfinitySpec extends FunSpecLike with Matchers with concurrent.Eventually {
   }
 
   def uploadCompleted: Int = {
-    val x = cssSelector("#finalResultsIPv4-upload-value").element.text
-    val y = cssSelector("#finalResultsIPv6-upload-value").element.text
-//    println(s"$x $y ${x.length + y.length}")
-    x.length + y.length
+    val d4 = cssSelector("#finalResultsIPv4-download-value").element.text
+    val d6 = cssSelector("#finalResultsIPv6-download-value").element.text
+    val u4 = cssSelector("#finalResultsIPv4-upload-value").element.text
+    val u6 = cssSelector("#finalResultsIPv6-upload-value").element.text
+    println(s"$d4 $d6 ${d4.length + d6.length}")
+    println(s"$u4 $u6 ${u4.length + u6.length}")
+    (d4.length + d6.length).min(u4.length + u6.length)
   }
 
 }
