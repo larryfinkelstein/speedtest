@@ -7,6 +7,8 @@ val scalaTestVersion = "3.0.3"
 
 parallelExecution in Test := false
 
+enablePlugins(JavaAppPackaging)
+
 libraryDependencies ++= Seq(
   "org.scalactic" %% "scalactic" % scalaTestVersion,
     "org.scalatest" % "scalatest_2.12" % scalaTestVersion,
